@@ -69,6 +69,41 @@ Route::middleware('iap:iap')->group(function () {
 
 The `iap` alias is registered automatically by the package's service provider.
 
+## Restrict by domain
+
+Pass one or more allowed domains after the guard name to restrict access to specific Google Workspace domains. Users from other domains receive a `403` response.
+
+```php
+Route::middleware('iap:iap,company.com')->group(function () {
+    Route::get('/dashboard', DashboardController::class);
+});
+
+// Multiple domains
+Route::middleware('iap:iap,company.com,partner.com')->group(function () {
+    Route::get('/dashboard', DashboardController::class);
+});
+```
+
+## Blade directives
+
+```blade
+@iapauth
+    Hello, {{ Auth::user()->email }}!
+@endiapauth
+
+@iapguest
+    You are not logged in.
+@endiapguest
+
+@iapdomain('company.com')
+    You are from company.com.
+@endiapdomain
+
+@iapdomain('company.com', 'partner.com')
+    You are from an allowed domain.
+@endiapdomain
+```
+
 ## Validate the audience claim
 
 IAP signs JWTs with an audience claim (`aud`) specific to your backend service. Validating it prevents tokens issued for one service from being accepted by another. Set it via the environment:

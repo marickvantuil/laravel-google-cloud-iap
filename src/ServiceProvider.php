@@ -6,6 +6,7 @@ namespace Marick\LaravelGoogleCloudIap;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
@@ -29,6 +30,30 @@ class ServiceProvider extends LaravelServiceProvider
         });
 
         $this->app['router']->aliasMiddleware('iap', Authenticate::class);
+
+        Blade::directive('iapauth', function () {
+            return "<?php if (auth()->guard('iap')->check()): ?>";
+        });
+
+        Blade::directive('endiapauth', function () {
+            return '<?php endif; ?>';
+        });
+
+        Blade::directive('iapguest', function () {
+            return "<?php if (auth()->guard('iap')->guest()): ?>";
+        });
+
+        Blade::directive('endiapguest', function () {
+            return '<?php endif; ?>';
+        });
+
+        Blade::directive('iapdomain', function (string $expression) {
+            return "<?php if (auth()->guard('iap')->check() && in_array(auth()->guard('iap')->user()->domain, [{$expression}])): ?>";
+        });
+
+        Blade::directive('endiapdomain', function () {
+            return '<?php endif; ?>';
+        });
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
