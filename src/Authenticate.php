@@ -9,7 +9,7 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
 {
-    public function handle($request, Closure $next, string ...$guards): mixed
+    public function handle($request, Closure $next, ...$guards): mixed
     {
         $authGuards = $guards ? [array_shift($guards)] : [];
         $allowedDomains = $guards;
@@ -19,7 +19,13 @@ class Authenticate extends Middleware
         if (! empty($allowedDomains)) {
             $user = $this->auth->guard($authGuards[0] ?? null)->user();
 
-            if (! $user || ! in_array($user->domain, $allowedDomains)) {
+            $allowedEmails = array_filter($allowedDomains, fn ($p) => str_contains($p, '@'));
+            $allowedDomains = array_filter($allowedDomains, fn ($p) => ! str_contains($p, '@'));
+
+            $allowed = ($user && in_array($user->email, $allowedEmails))
+                || ($user && in_array($user->domain, $allowedDomains));
+
+            if (! $allowed) {
                 abort(403, 'Forbidden.');
             }
         }

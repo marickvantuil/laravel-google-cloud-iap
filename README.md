@@ -69,17 +69,28 @@ Route::middleware('iap:iap')->group(function () {
 
 The `iap` alias is registered automatically by the package's service provider.
 
-## Restrict by domain
+## Restrict by domain or email
 
-Pass one or more allowed domains after the guard name to restrict access to specific Google Workspace domains. Users from other domains receive a `403` response.
+Pass allowed domains or email addresses after the guard name. Users that match none of them receive a `403` response.
 
 ```php
+// Single domain
 Route::middleware('iap:iap,company.com')->group(function () {
     Route::get('/dashboard', DashboardController::class);
 });
 
 // Multiple domains
 Route::middleware('iap:iap,company.com,partner.com')->group(function () {
+    Route::get('/dashboard', DashboardController::class);
+});
+
+// Specific email
+Route::middleware('iap:iap,john@company.com')->group(function () {
+    Route::get('/dashboard', DashboardController::class);
+});
+
+// Mixed domains and emails
+Route::middleware('iap:iap,company.com,john@partner.com')->group(function () {
     Route::get('/dashboard', DashboardController::class);
 });
 ```
