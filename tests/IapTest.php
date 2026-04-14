@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Marick\LaravelGoogleCloudIap\Authenticate;
 use Marick\LaravelGoogleCloudIap\CloudIAP;
 use Marick\LaravelGoogleCloudIap\IapUser;
 use PHPUnit\Framework\Attributes\Test;
@@ -114,6 +116,24 @@ class IapTest extends TestCase
             Auth::guard('iap')->user(),
             CloudIAP::user(),
         );
+    }
+
+    #[Test]
+    public function authenticate_middleware_returns_401_when_unauthenticated(): void
+    {
+        Route::middleware(Authenticate::class.':iap')->get('/protected', fn () => 'ok');
+
+        $this->get('/protected')->assertStatus(401);
+    }
+
+    #[Test]
+    public function authenticate_middleware_passes_when_acting_as(): void
+    {
+        Route::middleware(Authenticate::class.':iap')->get('/protected', fn () => 'ok');
+
+        CloudIAP::actingAs('john@example.com');
+
+        $this->get('/protected')->assertStatus(200);
     }
 
     #[Test]

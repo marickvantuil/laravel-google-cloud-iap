@@ -57,10 +57,22 @@ The user is an `IapUser` value object — it has no database backing. Google man
 
 ## Protect routes
 
-Use Laravel's standard `auth` middleware:
+Use the `Authenticate` middleware shipped with this package instead of Laravel's built-in `auth` middleware. This is necessary because IAP has no login page to redirect to — unauthenticated requests should return a `401` response instead.
+
+Register it in `bootstrap/app.php`:
 
 ```php
-Route::middleware('auth:iap')->group(function () {
+use Marick\LaravelGoogleCloudIap\Authenticate;
+
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->alias(['iap' => Authenticate::class]);
+})
+```
+
+Then use it on your routes:
+
+```php
+Route::middleware('iap:iap')->group(function () {
     Route::get('/dashboard', DashboardController::class);
 });
 ```
