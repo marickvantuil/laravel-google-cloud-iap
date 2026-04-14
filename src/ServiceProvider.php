@@ -28,6 +28,8 @@ class ServiceProvider extends LaravelServiceProvider
             return $app->make('cloud_iap');
         });
 
+        $this->app['router']->aliasMiddleware('iap', Authenticate::class);
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/iap.php' => config_path('iap.php'),
