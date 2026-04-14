@@ -27,4 +27,9 @@ class CloudIAP extends Facade
     {
         static::getFacadeRoot()->fake();
     }
+
+    public static function logoutUrl(string $redirectTo = '/'): string
+    {
+        return '/_gcp_iap/clear_login_cookie?rd='.urlencode($redirectTo);
+    }
 }

@@ -137,6 +137,18 @@ class IapTest extends TestCase
     }
 
     #[Test]
+    public function logout_url_returns_iap_clear_cookie_url(): void
+    {
+        $this->assertSame('/_gcp_iap/clear_login_cookie?rd=%2F', CloudIAP::logoutUrl());
+    }
+
+    #[Test]
+    public function logout_url_encodes_redirect_url(): void
+    {
+        $this->assertSame('/_gcp_iap/clear_login_cookie?rd=%2Fgoodbye', CloudIAP::logoutUrl('/goodbye'));
+    }
+
+    #[Test]
     public function iap_user_from_payload_extracts_claims(): void
     {
         $user = IapUser::fromPayload([
