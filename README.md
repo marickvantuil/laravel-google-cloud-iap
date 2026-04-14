@@ -57,19 +57,6 @@ Auth::id();     // returns the sub claim
 
 The user is an `IapUser` value object — it has no database backing. Google manages your users; this package just reads what IAP tells you.
 
-## Logout
-
-IAP manages the session via signed cookies. `CloudIAP::logout()` clears all IAP cookies from the browser and redirects the user, forcing re-authentication on the next request:
-
-```php
-use Marick\LaravelGoogleCloudIap\CloudIAP;
-
-return CloudIAP::logout();
-
-// Redirect to a specific URL after logout
-return CloudIAP::logout('/goodbye');
-```
-
 ## Protect routes
 
 Use the `iap` middleware alias instead of `auth`. This is necessary because IAP has no login page to redirect to — unauthenticated requests return a `401` response instead.
