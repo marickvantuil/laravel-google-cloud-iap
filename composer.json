@@ -1,0 +1,70 @@
+{
+  "name": "marick/laravel-google-cloud-iap",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Marick van Tuil",
+      "email": "info@marickvantuil.nl"
+    }
+  ],
+  "require": {
+    "google/auth": "^1.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "Marick\\LaravelGoogleCloudIap\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/",
+      "Workbench\\App\\": "workbench/app/",
+      "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+      "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Marick\\LaravelGoogleCloudIap\\ServiceProvider"
+      ],
+      "aliases": {
+        "CloudIAP": "Marick\\LaravelGoogleCloudIap\\CloudIAP"
+      }
+    }
+  },
+  "require-dev": {
+    "laravel/pint": "^1.29.0",
+    "laravel/framework": "^12.1.1 || ^13.0",
+    "larastan/larastan": "^3.2",
+    "thecodingmachine/phpstan-safe-rule": "^1.4",
+    "orchestra/testbench": "^10.1 || ^11.0"
+  },
+  "scripts": {
+    "test": "@php vendor/bin/testbench package:test",
+    "post-autoload-dump": [
+      "@clear",
+      "@prepare"
+    ],
+    "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+    "prepare": "@php vendor/bin/testbench package:discover --ansi",
+    "build": "@php vendor/bin/testbench workbench:build --ansi",
+    "serve": [
+      "Composer\\Config::disableProcessTimeout",
+      "@build",
+      "@php vendor/bin/testbench serve"
+    ],
+    "lint": [
+      "@php vendor/bin/pint",
+      "@php vendor/bin/phpstan analyse"
+    ],
+    "l12": [
+      "composer require laravel/framework:12.* orchestra/testbench:10.* --no-interaction --no-update",
+      "composer update --prefer-stable --prefer-dist --no-interaction"
+    ],
+    "l13": [
+      "composer require laravel/framework:13.* orchestra/testbench:11.* --no-interaction --no-update",
+      "composer update --prefer-stable --prefer-dist --no-interaction"
+    ]
+  }
+}
