@@ -60,7 +60,7 @@ The user is an `IapUser` value object — it has no database backing. Google man
 Use the `iap` middleware alias instead of `auth`. This is necessary because IAP has no login page to redirect to — unauthenticated requests return a `401` response instead.
 
 ```php
-Route::middleware('iap:iap')->group(function () {
+Route::middleware('iap')->group(function () {
     Route::get('/dashboard', DashboardController::class);
 });
 ```
