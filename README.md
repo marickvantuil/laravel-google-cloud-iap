@@ -10,6 +10,8 @@ This package verifies that JWT and exposes the user via `Auth::user()`, so you c
 
 This package requires Laravel 12 or 13.
 
+> **Note:** If your app uses database sessions, the `user_id` column in the `sessions` table must be a `varchar` instead of the default `bigint`, as IAP user identifiers are strings. Run a migration to change the column type before using this package.
+
 # Installation
 
 Install the package with Composer:
