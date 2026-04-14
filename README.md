@@ -59,15 +59,15 @@ The user is an `IapUser` value object — it has no database backing. Google man
 
 ## Logout
 
-IAP manages the session via a signed cookie. To log out, redirect the user to the IAP logout URL which clears the cookie:
+IAP manages the session via signed cookies. `CloudIAP::logout()` clears all IAP cookies from the browser and redirects the user, forcing re-authentication on the next request:
 
 ```php
 use Marick\LaravelGoogleCloudIap\CloudIAP;
 
-return redirect(CloudIAP::logoutUrl());
+return CloudIAP::logout();
 
 // Redirect to a specific URL after logout
-return redirect(CloudIAP::logoutUrl('/goodbye'));
+return CloudIAP::logout('/goodbye');
 ```
 
 ## Protect routes

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Marick\LaravelGoogleCloudIap;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -28,8 +29,25 @@ class CloudIAP extends Facade
         static::getFacadeRoot()->fake();
     }
 
-    public static function logoutUrl(string $redirectTo = '/'): string
+    public static function logout(string $redirectTo = '/'): RedirectResponse
     {
-        return '/_gcp_iap/clear_login_cookie?rd='.urlencode($redirectTo);
+        $response = redirect($redirectTo);
+
+        foreach (request()->cookies->all() as $name => $value) {
+            if (
+                str_starts_with($name, '__Host-GCP_IAP_AUTH_TOKEN_') ||
+                str_starts_with($name, 'GCP_IAP_UID') ||
+                str_starts_with($name, 'GCP_IAP_XSRF_NONCE_')
+            ) {
+                // __Host- prefixed cookies require Secure, Path=/, and no Domain
+                if (str_starts_with($name, '__Host-')) {
+                    header("Set-Cookie: {$name}=; Path=/; Secure; SameSite=Lax; Max-Age=0", false);
+                } else {
+                    cookie()->queue(cookie($name, '', -1, '/'));
+                }
+            }
+        }
+
+        return $response;
     }
 }

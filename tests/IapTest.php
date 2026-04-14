@@ -137,15 +137,16 @@ class IapTest extends TestCase
     }
 
     #[Test]
-    public function logout_url_returns_iap_clear_cookie_url(): void
+    public function logout_clears_iap_cookies_and_redirects(): void
     {
-        $this->assertSame('/_gcp_iap/clear_login_cookie?rd=%2F', CloudIAP::logoutUrl());
-    }
+        request()->cookies->set('__Host-GCP_IAP_AUTH_TOKEN_ABC123', 'token');
+        request()->cookies->set('GCP_IAP_UID123', 'uid');
+        request()->cookies->set('GCP_IAP_XSRF_NONCE_XYZ', 'nonce');
 
-    #[Test]
-    public function logout_url_encodes_redirect_url(): void
-    {
-        $this->assertSame('/_gcp_iap/clear_login_cookie?rd=%2Fgoodbye', CloudIAP::logoutUrl('/goodbye'));
+        $response = CloudIAP::logout('/');
+
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertStringContainsString('localhost', $response->getTargetUrl());
     }
 
     #[Test]
