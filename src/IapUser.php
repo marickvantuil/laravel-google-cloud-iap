@@ -34,6 +34,20 @@ class IapUser implements Authenticatable
         );
     }
 
+    public function allows(string ...$params): bool
+    {
+        foreach ($params as $param) {
+            if (str_contains($param, '@') && $this->email === $param) {
+                return true;
+            }
+            if (! str_contains($param, '@') && $this->domain === $param) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getAuthIdentifierName(): string
     {
         return 'sub';

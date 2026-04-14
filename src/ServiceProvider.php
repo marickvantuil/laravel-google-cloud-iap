@@ -31,8 +31,12 @@ class ServiceProvider extends LaravelServiceProvider
 
         $this->app['router']->aliasMiddleware('iap', Authenticate::class);
 
-        Blade::directive('iapauth', function () {
-            return "<?php if (auth()->guard('iap')->check()): ?>";
+        Blade::directive('iapauth', function (string $expression) {
+            if (empty(trim($expression))) {
+                return "<?php if (auth()->guard('iap')->check()): ?>";
+            }
+
+            return "<?php if (auth()->guard('iap')->check() && auth()->guard('iap')->user()->allows({$expression})): ?>";
         });
 
         Blade::directive('endiapauth', function () {
@@ -44,14 +48,6 @@ class ServiceProvider extends LaravelServiceProvider
         });
 
         Blade::directive('endiapguest', function () {
-            return '<?php endif; ?>';
-        });
-
-        Blade::directive('iapdomain', function (string $expression) {
-            return "<?php if (auth()->guard('iap')->check() && in_array(auth()->guard('iap')->user()->domain, [{$expression}])): ?>";
-        });
-
-        Blade::directive('endiapdomain', function () {
             return '<?php endif; ?>';
         });
 

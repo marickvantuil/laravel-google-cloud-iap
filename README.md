@@ -91,17 +91,21 @@ Route::middleware('iap:iap,company.com,partner.com')->group(function () {
     Hello, {{ Auth::user()->email }}!
 @endiapauth
 
+@iapauth('company.com')
+    You are from company.com.
+@endiapauth
+
+@iapauth('john@company.com')
+    Hello, John!
+@endiapauth
+
+@iapauth('company.com', 'john@partner.com')
+    You are from an allowed domain or a specific user.
+@endiapauth
+
 @iapguest
     You are not logged in.
 @endiapguest
-
-@iapdomain('company.com')
-    You are from company.com.
-@endiapdomain
-
-@iapdomain('company.com', 'partner.com')
-    You are from an allowed domain.
-@endiapdomain
 ```
 
 ## Validate the audience claim
