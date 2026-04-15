@@ -9,7 +9,7 @@
   ],
   "require": {
     "google/auth": "^1.9",
-    "kelvinmo/simplejwt": "^0.2"
+    "kelvinmo/simplejwt": "^1.1"
   },
   "autoload": {
     "psr-4": {
