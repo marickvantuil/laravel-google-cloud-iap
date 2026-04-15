@@ -1,5 +1,9 @@
 <sub>Companion packages: <a href="https://github.com/marickvantuil/laravel-google-cloud-logging">Cloud Logging</a>, <a href="https://github.com/stackkit/laravel-google-cloud-scheduler">Cloud Scheduler</a>, <a href="https://github.com/stackkit/laravel-google-cloud-tasks-queue">Cloud Tasks</a></sub>
 
+[![Run tests](https://github.com/marickvantuil/laravel-google-cloud-iap/actions/workflows/run-tests.yml/badge.svg)](https://github.com/marickvantuil/laravel-google-cloud-iap/actions/workflows/run-tests.yml)
+<a href="https://packagist.org/packages/marick/laravel-google-cloud-iap"><img src="https://poser.pugx.org/marick/laravel-google-cloud-iap/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/marick/laravel-google-cloud-iap"><img src="https://poser.pugx.org/marick/laravel-google-cloud-iap/downloads.svg" alt="Downloads"></a>
+
 # Introduction
 
 This package integrates [Google Cloud Identity-Aware Proxy (IAP)](https://cloud.google.com/iap) with Laravel's authentication system.
